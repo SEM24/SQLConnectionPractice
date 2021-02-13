@@ -76,5 +76,19 @@ public class Main {
 
     }
 
+    private void searchStudent(Connection connection, String searchString) throws SQLException {
+        PreparedStatement stmt2 = connection.prepareStatement("SELECT * FROM student WHERE ? IN (id,name,secondName,audience) ORDER BY name");
+        // PreparedStatement stmt2 = connection.prepareStatement("SELECT id,name,secondName,audience FROM 'student' WHERE id OR name OR secondName OR audience = ? ORDER BY name");
+        stmt2.setString(1, searchString);
+        ResultSet resultSet = stmt2.executeQuery();
+        while (resultSet.next()) {
+            int resultId = resultSet.getInt("id");
+            String resultName = resultSet.getString("name");
+            String resultSecondName = resultSet.getString("secondName");
+            String resultAudience = resultSet.getString("audience");
+            System.out.printf("%d. %s %s %s \n", resultId, resultName, resultSecondName, resultAudience);
+        }
+    }
+
 
 }
