@@ -90,5 +90,20 @@ public class Main {
         }
     }
 
+    private void insertStudent(Connection connection, int id, String name, String secondName, String audience) {
+        final String insertTemplate =
+                "INSERT INTO 'student'('id','name','secondName','audience') VALUES(?,?,?,?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(insertTemplate)) {
+            preparedStatement.setInt(1, id);
+            preparedStatement.setString(2, name);
+            preparedStatement.setString(3, secondName);
+            preparedStatement.setString(4, audience);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to insert student", e);
+        }
+    }
+
 
 }
