@@ -105,5 +105,19 @@ public class Main {
         }
     }
 
+    private void showStudents(Connection connection) {
+        try (Statement statement = connection.createStatement()) {
 
+            ResultSet cursor = statement.executeQuery("SELECT * FROM 'student' ORDER BY name");
+            while (cursor.next()) {
+                System.out.println("id = " + cursor.getInt("id"));
+                System.out.println("name = " + cursor.getString("name"));
+                System.out.println("secondName = " + cursor.getString("secondName"));
+                System.out.println("audience = " + cursor.getString("audience"));
+            }
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
+            System.out.println("Error" + throwable.getLocalizedMessage());
+        }
+    }
 }
