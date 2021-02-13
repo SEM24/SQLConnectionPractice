@@ -6,4 +6,75 @@ public class Main {
         new Main().run();
     }
 
+    private void run() {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:sample.db")) {
+            Statement statement = connection.createStatement();
+            Scanner scanner = new Scanner(System.in);
+            int x = 0;
+            String s = "";
+            while (!"6".equals(s)) {
+                System.out.println("1. Для создания таблицы введите 1");
+                System.out.println("2. Для удаления таблицы введите 2");
+                System.out.println("3. Для добавления новых данных введите 3");
+                System.out.println("4. Для вывода всех данных введите 4");
+                System.out.println("5. Для поиска данных по тексту введите 5");
+                System.out.println("6. Для выхода из приложения введите 6");
+                s = scanner.next();
+                try {
+                    x = Integer.parseInt(s);
+                } catch (NumberFormatException e) {
+                    System.out.println("Неверный ввод");
+                }
+                switch (x) {
+                    case 1:
+                        statement.executeUpdate("CREATE TABLE 'student' ('id' INTEGER, 'name' VARCHAR(100), 'secondName' VARCHAR(100), 'audience' VARCHAR(100))");
+                        break;
+
+                    case 2:
+                        statement.executeUpdate("DROP TABLE 'student' ");
+                        break;
+
+                    case 3:
+                        System.out.println("Введите номер");
+                        int id = scanner.nextInt();
+
+                        System.out.println("Введите имя");
+                        String name = scanner.next();
+
+                        System.out.println("Введите фамилию");
+                        String secondName = scanner.next();
+
+                        System.out.println("Введите аудиторию");
+                        String audience = scanner.next();
+
+                        insertStudent(connection, id, name, secondName, audience);
+                        System.out.println("Студент создан");
+
+                        break;
+
+                    case 4:
+                        showStudents(connection);
+                        break;
+
+                    case 5:
+                        System.out.println("Введите нужный текст");
+                        String searchString = scanner.next();
+                        searchStudent(connection, searchString);
+                        break;
+
+                    case 6:
+                        System.out.println("Выход");
+                        break;
+                }
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error" + e.getLocalizedMessage());
+        }
+
+    }
+
+
 }
